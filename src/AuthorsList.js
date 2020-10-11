@@ -4,7 +4,8 @@ import React, { useState } from "react";
 import AuthorCard from "./AuthorCard";
 import SearchBar from "./SearchBar";
 
-const AuthorsList = () => {
+const AuthorsList = (props) => {
+    console.log("here")
   const [filteredAuthors, setFilteredAuthors] = useState(props.authors);
 
   const filterAuthors = query => {

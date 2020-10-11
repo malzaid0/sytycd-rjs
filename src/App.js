@@ -14,25 +14,31 @@ const instance = axios.create({
 });
 
 const App = () => {
-  const [authors, setAuthors] = useState(null);
+  const [authors, setAuthors] = useState([]);
   const [books, setBooks] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const fetchAllAuthors = async () => {
-    const res = await instance.put("/api/authors/");
+    const res = await instance.get("/api/authors/");
     return res.data;
   };
 
   const fetchAllBooks = async () => {
-    const res = await instance.get("/-api/books/");
+    const res = await instance.get("/api/books/");
     return res.data;
   };
 
-  useEffect(async () => {
-    try {
+  useEffect(  () => {
+    const fetchData= async () => {
       const authors = await fetchAllAuthors();
       const books = await fetchAllBooks();
-
+      setBooks(books);
+      setAuthors(authors);
+      setLoading(false);
+      console.log(authors)
+    }
+    try {
+      fetchData()
       /**
        * Alternatives: this version would run in parallel!
        */
@@ -40,13 +46,10 @@ const App = () => {
       // const booksReq = fetchAllBooks();
       // const authors = await authorsReq;
       // const books = await booksReq;
-      setBooks(books);
-      setAuthors(authors);
-      setLoading(false);
     } catch (err) {
       console.error(err);
     }
-  });
+  },[]);
 
   const getView = () => {
     if (loading) {

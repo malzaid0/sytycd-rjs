@@ -15,13 +15,11 @@ const instance = axios.create({
 const AuthorDetail = props => {
   const [author, setAuthor] = useState(null);
   const [loading, setLoading] = useState(true);
+  const authorID = useParams().ID;
+
 
   useEffect(() => {
-    getAuthor();
-  }, [useParams().authorID]);
-
   const getAuthor = async () => {
-    const authorID = useParams().authorID;
     setLoading(true);
     try {
       const res = await instance.get(`/api/authors/${authorID}`);
@@ -32,12 +30,13 @@ const AuthorDetail = props => {
       console.error(err);
     }
   };
+    getAuthor();
+  }, [authorID]);
 
   if (loading) {
     return <Loading />;
   } else {
-    const author = author;
-    const authorName = `${author.first_name} ${author.last_name}`;
+    const authorName = `${author["first_name"]} ${author["last_name"]}`;
     return (
       <div className="author">
         <div>
